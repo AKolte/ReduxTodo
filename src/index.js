@@ -1,17 +1,17 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
+import App from './App.jsx';
 import * as serviceWorker from './serviceWorker';
 import 'bootstrap/dist/css/bootstrap.css'
-import Counter from './components/counter';
-import Tasklist from './components/Tasklist';
+
+
+
 
 ReactDOM.render(
  <div>
-   <Tasklist>
-
-   </Tasklist>
+   <App>
+   </App>
  
  </div>
 ,

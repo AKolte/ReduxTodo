@@ -3,6 +3,7 @@ import './App.css';
 import Tasklist from './components/Tasklist';
 import AddTask from './components/AddTask';
 import Filter from './components/Filter'
+import store from "./store";
 
 class App extends Component {
   state = { 
@@ -28,31 +29,40 @@ class App extends Component {
     tasks[index].status=task.status?false:true;
     this.setState(tasks);
     console.log(this.state.tasks[index].status)
+    // Redux
+    store.dispatch({type:"STATUS_CHANGE",payload:{id:0}})
+    console.log(store.getState())
   }
 
    deleteTask=(task)=>{
     let tasks = [...this.state.tasks];
-    tasks=tasks.filter((i)=>(i!=task));
+    tasks=tasks.filter((i)=>(i!==task));
     this.setState({tasks:tasks});
     console.log(tasks);
   }
 
    filterTasks=(task)=>{
-    if(this.state.filter=="All"){return true}
+    if(this.state.filter==="All"){return true}
     else{
-      if(this.state.filter=="Completed") {return (task.status)}
+      if(this.state.filter==="Completed") {return (task.status)}
       else{return (!task.status) }
     }
   }
 
    addTask=()=>{
     let title = document.getElementById("newTaskTitle").value;
-    if(title.trim()!=""){
+    if(title.trim()!==""){
+      store.dispatch({
+        type: "ADD_TASK",
+        payload:{"title":title}
+      })
+      //redux
     let tasks=this.state.tasks;
     tasks.push({title:title, status:false});
     this.setState(tasks);
       document.getElementById("newTaskTitle").value="";
     }
+    console.log(store.getState());
   }
 /*
 Returns the following Components:
@@ -64,6 +74,7 @@ TaskList
     return (
       <div>
         <Filter
+          filter={this.state.filter}
           handleUpdateFilter={(i) => this.setState({ filter: i })}
           filters={this.state.filters}
         />
