@@ -1,12 +1,24 @@
 import React, { Component } from 'react'
 
 class AddTask extends Component {
+  constructor(props){
+    super(props);
+    this.state={
+      "inputValue":""
+    }
+  }  
+  
+  updateNewTaskTitle(){
     
+    }
     render() { 
         return (
           <div className="col-md-3">
             <div className="input-group">
               <input
+                onChange={(evt) =>
+                  this.setState({ inputValue: evt.target.value })
+                }
                 type="text"
                 id="newTaskTitle"
                 className="form-control"
@@ -16,7 +28,7 @@ class AddTask extends Component {
                 <button
                   className="btn btn-default"
                   type="button"
-                  onClick={this.props.handleAddTask}
+                  onClick={()=>this.props.handleAddTask(this.state.inputValue)}
                 >
                   Add
                 </button>

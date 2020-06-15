@@ -39,6 +39,9 @@ class App extends Component {
     tasks=tasks.filter((i)=>(i!==task));
     this.setState({tasks:tasks});
     console.log(tasks);
+    //redux
+    store.dispatch({type:"TASK_DELETED",payload:{"id":0}});
+    console.log(store.getState())
   }
 
    filterTasks=(task)=>{
@@ -49,8 +52,8 @@ class App extends Component {
     }
   }
 
-   addTask=()=>{
-    let title = document.getElementById("newTaskTitle").value;
+   addTask=(title)=>{
+    //let title = document.getElementById("newTaskTitle").value;
     if(title.trim()!==""){
       store.dispatch({
         type: "ADD_TASK",
@@ -79,7 +82,7 @@ TaskList
           filters={this.state.filters}
         />
         
-        <AddTask handleAddTask={this.addTask} />
+        <AddTask handleAddTask={(title)=>this.addTask(title)} />
         
         <Tasklist
           tasks={this.state.tasks}

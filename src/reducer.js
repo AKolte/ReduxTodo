@@ -14,7 +14,7 @@ if(action.type==='ADD_TASK'){
         return {
             ...state,
             tasks: state.tasks.filter((task) => (
-                task.id !== action.payload.id)),
+                task.id !== action.payload.id))
                 
         }
     
