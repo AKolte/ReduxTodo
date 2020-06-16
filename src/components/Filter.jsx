@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import {ButtonGroup} from "react-bootstrap";
 
 class Filter extends Component {
   renderClassName(filter,i){
@@ -8,7 +9,7 @@ class Filter extends Component {
     render() { 
         return (
           <nav className="navbar navbar-light bg-light">
-            <div className="btn-group" role="group">
+            <ButtonGroup>
               {this.props.filters.map((i) => (
                 <button
                   type="button"
@@ -19,7 +20,7 @@ class Filter extends Component {
                   {i}
                 </button>
               ))}
-            </div>
+            </ButtonGroup>
           </nav>
         );
     }

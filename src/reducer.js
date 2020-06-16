@@ -1,6 +1,16 @@
-let lastId=0;
-export default function reducer(state = {"filter":"All","filters":["All","Completed","Pending"],tasks:[]},action){
-if(action.type==='ADD_TASK'){
+let lastId=2;
+const initalState = {
+  filter: "All",
+  filters: ["All", "Completed", "Pending"],
+  tasks: [
+      {id:0,title:"Bake Cake"},
+      {id:1,title:"Walk the Dog"},
+    ],
+};
+
+export default function reducer(state = initalState,action){
+switch(action.type){
+case 'TASK_ADDED':
     return{
         ...state,
         "tasks":[
@@ -9,18 +19,15 @@ if(action.type==='ADD_TASK'){
         "title":action.payload.title,
         "status": false}
         ]
-    }}
-    else if(action.type==='TASK_DELETED'){
+    }
+case 'TASK_DELETED':
         return {
             ...state,
             tasks: state.tasks.filter((task) => (
-                task.id !== action.payload.id))
-                
+                task.id !== action.payload.id))                
         }
     
-    }
-
-    else if(action.type==="STATUS_CHANGE"){
+case 'STATUS_CHANGE':
         return {
             ...state,
             "tasks":
@@ -30,9 +37,13 @@ if(action.type==='ADD_TASK'){
                     else{return task}
                 })            
         }
-    
-    
-        
-        
+case 'FILTER_CHANGE':
+    return{
+        ...state,
+        filter:action.payload.filter,
     }
+    
+default:
+    return state;   
+}
 }

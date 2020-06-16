@@ -3,17 +3,19 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App.jsx';
 import * as serviceWorker from './serviceWorker';
-import 'bootstrap/dist/css/bootstrap.css'
+import * as bootstrap from 'react-bootstrap';
+import {createStore} from 'redux';
+import reducer from './reducer';
+import { Provider } from "react-redux";
 
-
-
+const store = createStore(reducer);
 
 ReactDOM.render(
- <div>
+ <Provider store={store}>
    <App>
    </App>
  
- </div>
+ </Provider>
 ,
   document.getElementById('root')
 );

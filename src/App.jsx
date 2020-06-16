@@ -2,8 +2,11 @@ import React, { Component } from "react";
 import './App.css';
 import Tasklist from './components/Tasklist';
 import AddTask from './components/AddTask';
-import Filter from './components/Filter'
-import store from "./store";
+import Filter from './components/Filter';
+import {connect} from 'react-redux';
+import * as actions from './actions'; 
+
+
 
 class App extends Component {
   state = { 
@@ -23,50 +26,18 @@ class App extends Component {
  addTask() - Returns Nothing - Adds the task in the input field to the Todo List.
  */
 
-  switchStatus=(task)=>{
-    const tasks = [...this.state.tasks];
-    const index = tasks.indexOf(task);
-    tasks[index].status=task.status?false:true;
-    this.setState(tasks);
-    console.log(this.state.tasks[index].status)
-    // Redux
-    store.dispatch({type:"STATUS_CHANGE",payload:{id:0}})
-    console.log(store.getState())
-  }
-
-   deleteTask=(task)=>{
-    let tasks = [...this.state.tasks];
-    tasks=tasks.filter((i)=>(i!==task));
-    this.setState({tasks:tasks});
-    console.log(tasks);
-    //redux
-    store.dispatch({type:"TASK_DELETED",payload:{"id":0}});
-    console.log(store.getState())
-  }
+   
 
    filterTasks=(task)=>{
-    if(this.state.filter==="All"){return true}
+    let filter=this.props.filter;
+    if(filter==="All"){return true}
     else{
-      if(this.state.filter==="Completed") {return (task.status)}
+      if(filter==="Completed") {return (task.status)}
       else{return (!task.status) }
     }
   }
 
-   addTask=(title)=>{
-    //let title = document.getElementById("newTaskTitle").value;
-    if(title.trim()!==""){
-      store.dispatch({
-        type: "ADD_TASK",
-        payload:{"title":title}
-      })
-      //redux
-    let tasks=this.state.tasks;
-    tasks.push({title:title, status:false});
-    this.setState(tasks);
-      document.getElementById("newTaskTitle").value="";
-    }
-    console.log(store.getState());
-  }
+   
 /*
 Returns the following Components:
 Filter
@@ -74,25 +45,44 @@ AddTask
 TaskList
 */ 
   render() { 
+    
     return (
       <div>
         <Filter
-          filter={this.state.filter}
-          handleUpdateFilter={(i) => this.setState({ filter: i })}
-          filters={this.state.filters}
+          filter={this.props.filter}
+          handleUpdateFilter={(filter) => this.props.updateFilter(filter)}
+          filters={this.props.filters}
         />
         
-        <AddTask handleAddTask={(title)=>this.addTask(title)} />
+        <AddTask handleAddTask={(title)=>{if(title.trim()!=="") this.props.addTask(title)}} />
         
         <Tasklist
-          tasks={this.state.tasks}
-          handleFilterTasks={(i) => this.filterTasks(i)}
-          handleSwitchStatus={(i) => this.switchStatus(i)}
-          handleDeleteTask={(i) => this.deleteTask(i)}
+          tasks={this.props.tasks}
+          handleFilterTasks={(task) => this.filterTasks(task)}
+          handleSwitchStatus={(task) => this.props.switchStatus(task.id)}
+          handleDeleteTask={(task) => this.props.deleteTask(task.id)}
         ></Tasklist>
       </div>
     );
   }
+  //sub = store.subscribe(()=>{console.log("STORE")})
 }
  
-export default App;
+const mapStateToProps = state =>{
+  return{
+    tasks:state.tasks,
+    filter:state.filter,
+    filters:state.filters,
+  };
+}
+
+const mapStateToDispatch=dispatch=>{
+  return{
+    addTask:(title)=>dispatch(actions.addTask(title)),
+    updateFilter:(filter)=>dispatch(actions.updateFilter(filter)),
+    switchStatus:(taskId)=>dispatch(actions.statusChange(taskId)),
+    deleteTask:(taskId)=>dispatch(actions.deleteTask(taskId)),
+  }
+}
+
+export default connect(mapStateToProps,mapStateToDispatch)(App);
