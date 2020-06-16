@@ -1,5 +1,5 @@
-import React, { Component } from 'react'
-
+import React, { Component } from 'react';
+import{Button} from 'react-bootstrap';
 class AddTask extends Component {
   constructor(props){
     super(props);
@@ -23,15 +23,19 @@ class AddTask extends Component {
                 id="newTaskTitle"
                 className="form-control"
                 placeholder="Add new Task"
+                value={this.state.inputValue}
               />
               <span className="input-group-btn">
-                <button
-                  className="btn btn-default"
+                <Button
+                  
                   type="button"
-                  onClick={()=>this.props.handleAddTask(this.state.inputValue)}
+                  onClick={()=>{
+                    this.props.handleAddTask(this.state.inputValue)
+                    this.setState({inputValue:""})
+                  }}
                 >
                   Add
-                </button>
+                </Button>
               </span>
             </div>
           </div>
